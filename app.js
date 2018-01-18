@@ -67,6 +67,19 @@ app.post("/blogs", function (req, res) {
 
 });
 
+//Show Route
+app.get("/blogs/:id", function (req, res) {
+    Blog.findById(req.params.id, function (err, foundBlog) {
+        if (err) {
+            res.redirect("/blogs");
+        }
+        else {
+            console.log(foundBlog);
+            res.render("show", {blog: foundBlog});
+        }
+
+    });
+});
 
 app.listen(port, host, function () {
     console.log("RESTful blog started!");
