@@ -6,7 +6,7 @@ express = require("express");
 mongoose = require("mongoose");
 app = express();
 
-//APp Config
+//App Config
 mongoose.connect("mongodb://localhost/restful_blog")
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -41,6 +41,7 @@ app.get("/", function (req, res) {
     res.redirect("/blogs");
 });
 
+//Index Route
 app.get("/blogs", function (req, res) {
     Blog.find({}, function (err, blogs) {
         if (!err) {
@@ -49,6 +50,23 @@ app.get("/blogs", function (req, res) {
         else console.log(err);
     });
 });
+
+//New Route
+app.get("/blogs/new", function (req, res) {
+    res.render("new")
+});
+
+//Create Route
+app.post("/blogs", function (req, res) {
+    Blog.create(req.body.blog, function (err, newBlog) {
+        if (!err) {
+            res.redirect("/blogs");
+        }
+        else res.render("new");
+    });
+
+});
+
 
 app.listen(port, host, function () {
     console.log("RESTful blog started!");
