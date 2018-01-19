@@ -2,6 +2,7 @@ const port = 4321;
 const host = "localhost"; //optional
 var bodyParser = require("body-parser");
 var express = require("express");
+var expressSanitizer = require("express-sanitizer");
 var methodOverride = require("method-override");
 var mongoose = require("mongoose");
 var app = express();
@@ -11,6 +12,7 @@ mongoose.connect("mongodb://localhost/restful_blog");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressSanitizer()); //AFTER bodyParser!!
 app.use(methodOverride("_method"));
 
 //Mongoose Model Config
@@ -21,21 +23,6 @@ var blogSchema = new mongoose.Schema({
     created: {type: Date, default: Date.now}
 });
 var Blog = mongoose.model("Blog", blogSchema);
-
-/*
-TEST
-Blog.create({
-    title: "Test blog",
-    image: "https://images.unsplash.com/photo-1429593886847-3cc52983f919?auto=format&fit=crop&w=1389&q=80",
-    body: "Hello! New Post!"
-});
-*/
-
-/*The blog has:
-title
-body
-image
-date*/
 
 //RESTful Routes
 app.get("/", function (req, res) {
@@ -59,6 +46,7 @@ app.get("/blogs/new", function (req, res) {
 
 //Create Route
 app.post("/blogs", function (req, res) {
+    req.body.blog.body = req.sanitize(req.body.blog.body); //Use middleware for this instead!
     Blog.create(req.body.blog, function (err, newBlog) {
         if (!err) {
             res.redirect("/blogs");
@@ -95,6 +83,7 @@ app.get("/blogs/:id/edit", function (req, res) {
 
 //Update route
 app.put("/blogs/:id", function (req, res) {
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, updatedBlog) {
         if (!err) {
             res.redirect("/blogs/" + req.params.id) //id also in updatedBlog.id
