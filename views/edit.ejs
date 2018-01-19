@@ -1,7 +1,7 @@
 <% include ./partials/header %>
 <div class="ui main text container segment">
     <div class="ui huge header">Edit <%= blog.title %></div>
-    <form action="/blogs/<%= blog.id %>?_method = put" method="post" class="ui form">
+    <form action="/blogs/<%= blog.id %>?_method=put" method="post" class="ui form">
         <div class="field">
             <label for="">Title:</label>
             <input type="text" name="blog[title]" id="" value="<%= blog.title %>">
