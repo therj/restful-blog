@@ -7,7 +7,7 @@ mongoose = require("mongoose");
 app = express();
 
 //App Config
-mongoose.connect("mongodb://localhost/restful_blog")
+mongoose.connect("mongodb://localhost/restful_blog");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -70,16 +70,33 @@ app.post("/blogs", function (req, res) {
 //Show Route
 app.get("/blogs/:id", function (req, res) {
     Blog.findById(req.params.id, function (err, foundBlog) {
-        if (err) {
-            res.redirect("/blogs");
-        }
-        else {
-            console.log(foundBlog);
+        if (!err) {
             res.render("show", {blog: foundBlog});
         }
-
+        else {
+            res.redirect("/blogs");
+        }
     });
 });
+
+//Edit Route
+app.get("/blogs/:id/edit", function (req, res) {
+    Blog.findById(req.params.id, function (err, foundBlog) {
+        if (!err) {
+            res.render("edit", {blog: foundBlog});
+
+        }
+        else {
+            res.redirect("/blog")
+        }
+    });
+});
+
+//Update route
+app.put("/blogs:id", function (req, res) {
+    res.send("Update Route");
+});
+
 
 app.listen(port, host, function () {
     console.log("RESTful blog started!");
