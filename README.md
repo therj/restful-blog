@@ -9,7 +9,7 @@ CRUD operations with [MongoDB](https://www.mongodb.com).
 * ejs
 * body-parser
 * mongoose
-
+* method-override
 
 ##
 Run `mongod` before app.
