@@ -10,6 +10,7 @@ CRUD operations with [MongoDB](https://www.mongodb.com).
 * body-parser
 * mongoose
 * method-override
+* express-sanitizer
 
 ##
 Run `mongod` before app.
